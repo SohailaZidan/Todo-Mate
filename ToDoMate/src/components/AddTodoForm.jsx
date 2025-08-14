@@ -10,26 +10,24 @@ export default function AddTodoForm({ onAdd }) {
     onAdd(v);
     setText("");
   };
-
 return (
-  <form 
-    onSubmit={submit} 
-    className="flex items-center gap-3 bg-white p-4 rounded-lg "
-  >
+  <form onSubmit={submit} className="flex items-center gap-3 bg-[#3A3A4F] p-4 rounded-xl shadow-inner mb-5">
     <input
       type="text"
       placeholder="Add a new task..."
       value={text}
       onChange={(e) => setText(e.target.value)}
-      className="flex-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+      className="flex-1 p-3 border  border-gray-600 rounded-xl bg-[#2A2A3B] text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
     />
-    <button 
-      type="submit" 
-      className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-200"
+    <button
+      type="submit"
+      className="px-5 py-3 cursor-pointer font-semibold rounded-xl text-white bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 transition duration-200"
     >
       Add
     </button>
   </form>
 );
+
+
 
 }
