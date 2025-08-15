@@ -1,62 +1,28 @@
-import { useContext, useEffect, useMemo, useState } from "react";
-import { AuthContext } from "../context/AuthContext";
+import {  useEffect, useMemo, useState } from "react";
 import AddTodoForm from "./AddTodoForm";
 import TodoItem from "./TodoItem";
-
 const STORAGE_KEY = "todos_table";
-function getAllTodos() {
-  const raw = localStorage.getItem(STORAGE_KEY);
-  try {
-    return raw ? JSON.parse(raw) : {};
-  } catch {
-    return {};
-  }
-}
-
-function saveAllTodos(data) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-}
 
 export default function TodoList() {
-  const { currentUser } = useContext(AuthContext);
-  const userKey = currentUser ? currentUser.email : "guest";
-
-  const [todos, setTodos] = useState([]);
-
-  const [loaded, setLoaded] = useState(false); 
-
-  useEffect(() => {
-    const all = getAllTodos();
-    let updatedTodos = [];
-
-    if (currentUser) {
-      const userKey = currentUser.email;
-      const guestTodos = all["guest"] || [];
-      const userTodos = all[userKey] || [];
-      if (guestTodos.length > 0) {
-        updatedTodos = [...guestTodos, ...userTodos];
-        all[userKey] = updatedTodos;
-        delete all["guest"];
-        saveAllTodos(all);
-      } else {
-        updatedTodos = userTodos;
-      }
-    } else {
-      updatedTodos = all["guest"] || [];
+const [todos, setTodos] = useState([]);
+useEffect(() => {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (raw) {
+    try {
+      setTodos(JSON.parse(raw));
+    } catch {
+      console.error("Invalid todos data in storage");
     }
+  }
+}, []);
 
-    setTodos(updatedTodos);
-    setLoaded(true); 
-  }, [currentUser]);
+useEffect(() => {
+  if (todos.length > 0) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
+  }
+}, [todos]);
 
-  useEffect(() => {
-    if (!loaded) return; 
-    const all = getAllTodos();
-    all[userKey] = todos;
-    saveAllTodos(all);
-  }, [todos, userKey, loaded]);
 
-  
   const addTodo = (title) => {
     if (!title.trim()) return;
     const newItem = {
@@ -87,7 +53,7 @@ export default function TodoList() {
   return (
   <div>
     <h2 className="text-2xl font-bold mb-5 text-gray-100">
-      {currentUser ? `Hi ${currentUser.name}, here are your tasks` : "Your Tasks"}
+     Your Tasks
     </h2>
 
     <AddTodoForm onAdd={addTodo} />
