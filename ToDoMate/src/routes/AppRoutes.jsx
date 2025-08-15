@@ -4,14 +4,16 @@ import Home from "../pages/Home";
 
 const AppRoutes = () => {
   return (
-    <Router>
+    <div>
+       <Router>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/home" element={<Home />} />
       </Routes>
     </Router>
-  );
-};
-
+    </div>
+  )
+}
 
 export default AppRoutes

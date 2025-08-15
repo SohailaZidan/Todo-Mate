@@ -1,24 +1,26 @@
 import {  useEffect, useMemo, useState } from "react";
 import AddTodoForm from "./AddTodoForm";
 import TodoItem from "./TodoItem";
-
 const STORAGE_KEY = "todos_table";
 
 export default function TodoList() {
 const [todos, setTodos] = useState([]);
-
-  useEffect(() => {
-    const raw = localStorage.getItem(STORAGE_KEY);
+useEffect(() => {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (raw) {
     try {
-      setTodos(raw ? JSON.parse(raw) : []);
+      setTodos(JSON.parse(raw));
     } catch {
-      setTodos([]);
+      console.error("Invalid todos data in storage");
     }
-  }, []);
+  }
+}, []);
 
-  useEffect(() => {
+useEffect(() => {
+  if (todos.length > 0) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
-  }, [todos]);
+  }
+}, [todos]);
 
 
   const addTodo = (title) => {
